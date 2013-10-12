@@ -13,6 +13,10 @@
 
 namespace MyGUI
 {
+    //c++兼容问题
+    class UString;
+    std::ostream& operator << ( std::ostream& os, const UString& s );
+    
 	namespace utility
 	{
 
@@ -43,7 +47,7 @@ namespace MyGUI
 			stream << p1 << p2;
 			return stream.str();
 		}
-
+        
 		template<typename T1,  typename T2,  typename T3>
 		inline std::string toString (T1 p1, T2 p2, T3 p3)
 		{

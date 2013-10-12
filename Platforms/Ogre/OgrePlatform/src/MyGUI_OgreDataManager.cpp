@@ -114,7 +114,7 @@ namespace MyGUI
 			Ogre::FileInfoListPtr pFileInfo = pFileInfos[i];
 			for (Ogre::FileInfoList::iterator fi = pFileInfo->begin(); fi != pFileInfo->end(); ++fi )
 			{
-				if (fi->path.empty())
+			//	if (fi->path.empty())
 				{
 					bool found = false;
 					for (VectorString::iterator iter = result.begin(); iter != result.end(); ++iter)

@@ -19,6 +19,7 @@ namespace MyGUI
 		Colour();
 		Colour(float _red, float _green, float _blue, float _alpha = 1);
 		explicit Colour(const std::string& _value);
+		Colour(uint32 _c);
 
 		Colour& operator = (Colour const& _value);
 		bool operator == (Colour const& _value) const;

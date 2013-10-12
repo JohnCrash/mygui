@@ -26,14 +26,15 @@ namespace MyGUI
 		mWidgetMouseFocus(nullptr),
 		mWidgetKeyFocus(nullptr),
 		mLayerMouseFocus(nullptr),
-		mIsShiftPressed(false),
-		mIsControlPressed(false),
+	//	mIsShiftPressed(false),
+	//	mIsControlPressed(false),
 		mHoldKey(KeyCode::None),
 		mHoldChar(0),
 		mFirstPressKey(false),
 		mTimerKey(0.0f),
 		mOldAbsZ(0),
-		mIsInitialise(false)
+		mIsInitialise(false),
+        mKeyStates(nullptr)
 	{
 		resetMouseCaptureWidget();
 	}
@@ -50,8 +51,8 @@ namespace MyGUI
 		{
 			mMouseCapture[i] = false;
 		}
-		mIsShiftPressed = false;
-		mIsControlPressed = false;
+	//	mIsShiftPressed = false;
+	//	mIsControlPressed = false;
 		mHoldKey = KeyCode::None;
 		mHoldChar = 0;
 		mFirstPressKey = true;
@@ -341,7 +342,7 @@ namespace MyGUI
 	bool InputManager::injectKeyPress(KeyCode _key, Char _text)
 	{
 		// проверка на переключение языков
-		firstEncoding(_key, true);
+//		firstEncoding(_key, true);
 
 		// запоминаем клавишу
 		storeKey(_key, _text);
@@ -360,7 +361,7 @@ namespace MyGUI
 	bool InputManager::injectKeyRelease(KeyCode _key)
 	{
 		// проверка на переключение языков
-		firstEncoding(_key, false);
+//		firstEncoding(_key, false);
 
 		// сбрасываем клавишу
 		resetKey();
@@ -372,15 +373,16 @@ namespace MyGUI
 
 		return wasFocusKey;
 	}
-
+/*
 	void InputManager::firstEncoding(KeyCode _key, bool bIsKeyPressed)
 	{
+
 		if ((_key == KeyCode::LeftShift) || (_key == KeyCode::RightShift))
 			mIsShiftPressed = bIsKeyPressed;
 		if ((_key == KeyCode::LeftControl) || (_key == KeyCode::RightControl))
 			mIsControlPressed = bIsKeyPressed;
 	}
-
+*/
 	void InputManager::setKeyFocusWidget(Widget* _widget)
 	{
 		if (_widget == mWidgetKeyFocus)
@@ -433,6 +435,18 @@ namespace MyGUI
 		mWidgetKeyFocus = _widget;
 	}
 
+    void InputManager::setKeyboardStates( unsigned char* ps )
+    {
+        mKeyStates = ps;
+    }
+    
+    bool InputManager::getKeyState(KeyCode _key) const
+    {
+        if( _key.getValue()>= 0 && _key.getValue()<256 && mKeyStates )
+            return mKeyStates[_key.getValue()];
+        return false;
+    }
+    
 	void InputManager::_resetMouseFocusWidget()
 	{
 		Widget* mouseFocus = mWidgetMouseFocus;
@@ -537,6 +551,14 @@ namespace MyGUI
 		mHoldKey = _key;
 		mHoldChar = _text;
 		mTimerKey = 0.0f;
+        
+        /*
+         如果是MacX，和command键组合的键不会产生KeyUp事件，这导致无限重复
+        */
+#if MYGUI_PLATFORM == MYGUI_PLATFORM_APPLE
+        if( getKeyState(KeyCode::COMMAND) )
+            resetKey();
+#endif
 	}
 
 	void InputManager::resetKey()
@@ -651,12 +673,12 @@ namespace MyGUI
 
 	bool InputManager::isControlPressed() const
 	{
-		return mIsControlPressed;
+		return getKeyState(KeyCode::LeftControl)|getKeyState(KeyCode::RightControl);
 	}
 
 	bool InputManager::isShiftPressed() const
 	{
-		return mIsShiftPressed;
+		return getKeyState(KeyCode::LeftShift)|getKeyState(KeyCode::RightShift);
 	}
 
 	void InputManager::resetMouseCaptureWidget()

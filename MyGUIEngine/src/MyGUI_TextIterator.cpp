@@ -6,6 +6,7 @@
 
 #include "MyGUI_Precompiled.h"
 #include "MyGUI_TextIterator.h"
+#include "MyGUI_TextTag.h"
 
 namespace MyGUI
 {
@@ -29,7 +30,7 @@ namespace MyGUI
 		mHistory(_history)
 	{
 	}
-
+	
 	bool TextIterator::moveNext()
 	{
 		if (mCurrent == mEnd) return false;
@@ -71,19 +72,24 @@ namespace MyGUI
 					mCurrent = iter;
 					return true;
 				}
-
-				// остальные 5 символов цвета
-				for (size_t pos = 0; pos < 5; pos++)
+				//新增加的Tag 分别是Italic Normal BoldItalic Bold
+				IFont::Style _style;
+				uint32 colour;
+				if( !tryFontStyleTag(iter,mEnd,_style) && 
+					!tryColourTag(iter,mEnd,colour) )
 				{
-					// следующий символ
-					++ iter;
+					mPosition ++;
+					++iter;
 					if (iter == mEnd)
 					{
 						mCurrent = mEnd;
 						return false;
 					}
-				}
 
+					// указатель на следующий символ
+					mCurrent = iter;
+					return true;
+				}
 			}
 			else
 			{
@@ -181,17 +187,18 @@ namespace MyGUI
 				// тэг цвета
 				if ((*iter) != L'#')
 				{
-					// остальные 5 символов цвета
-					for (size_t pos = 0; pos < 5; pos++)
+					//新增加的Tag
+					IFont::Style _style;
+					if( tryFontStyleTag(iter,mEnd,_style) )
 					{
-						++ iter;
-						if (iter == mEnd)
-						{
-							--iter;
-							break;
-						}
+						continue;
 					}
-					continue;
+					// остальные 5 символов цвета
+					uint32 colour;
+					if( tryColourTag(iter,mEnd,colour) )
+					{
+						continue;
+					}
 				}
 			}
 
@@ -221,17 +228,17 @@ namespace MyGUI
 				// тэг цвета
 				if ((*iter) != L'#')
 				{
-					// остальные 5 символов цвета
-					for (size_t pos = 0; pos < 5; pos++)
+					//新增加的Tag
+					IFont::Style _style;
+					if( tryFontStyleTag(iter,end,_style) )
 					{
-						++ iter;
-						if (iter == end)
-						{
-							--iter;
-							break;
-						}
+						continue;
 					}
-					continue;
+					uint32 colour;
+					if( tryColourTag(iter,end,colour) )
+					{
+						continue;
+					}
 				}
 			}
 
@@ -251,6 +258,14 @@ namespace MyGUI
 		++_iter;
 		if ( (_iter == mEnd) || ((*_iter) == L'#') ) return false;
 
+		uint32 colour;
+		if( tryColourTag(_iter,mEnd,colour) )
+		{
+			_colour = convertTagColour( MyGUI::Colour(colour) );
+			return true;
+		}
+		return false;
+/*
 		// берем цвет
 		wchar_t buff[16] = L"#FFFFFF\0";
 		buff[1] = (wchar_t)(*_iter);
@@ -267,6 +282,7 @@ namespace MyGUI
 		// возвращаем цвет
 		_colour = buff;
 		return true;
+		*/
 	}
 
 	void TextIterator::clearNewLine(UString& _text)
@@ -434,17 +450,17 @@ namespace MyGUI
 				// тэг цвета
 				if ((*iter) != L'#')
 				{
-					// остальные 5 символов цвета
-					for (size_t pos = 0; pos < 5; pos++)
+					//新增加的Tag
+					IFont::Style _style;
+					if( tryFontStyleTag(iter,mEnd,_style) )
 					{
-						++ iter;
-						if (iter == mEnd)
-						{
-							-- iter;
-							break;
-						}
+						continue;
 					}
-					continue;
+					uint32 colour;
+					if( tryColourTag(iter,mEnd,colour) )
+					{
+						continue;
+					}
 				}
 			}
 

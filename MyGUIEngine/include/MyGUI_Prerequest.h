@@ -52,6 +52,7 @@ namespace MyGUI
 	class FactoryManager;
 	class TextureManager;
 	class ToolTipManager;
+	class EditTextManager;
 
 	class Widget;
 	class Button;

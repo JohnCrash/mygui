@@ -151,7 +151,8 @@ namespace MyGUI
 			VectorElement::iterator m_current, m_end;
 		};
 
-
+		//用于Lua输出
+		typedef void (*NotifyDelete)( const ElementPtr& );
 		//----------------------------------------------------------------------//
 		// class Element
 		//----------------------------------------------------------------------//
@@ -161,7 +162,10 @@ namespace MyGUI
 
 		public:
 			~Element();
-
+			void setNotifyDelete( const NotifyDelete& func )
+			{
+				notifyDelete = func;
+			}
 		private:
 			Element(const std::string& _name, ElementPtr _parent, ElementType _type = ElementType::Normal, const std::string& _content = "");
 			void save(std::ostream& _stream, size_t _level);
@@ -275,6 +279,7 @@ namespace MyGUI
 			VectorElement mChilds;
 			ElementPtr mParent;
 			ElementType mType;
+			NotifyDelete notifyDelete;
 		};
 
 		//----------------------------------------------------------------------//

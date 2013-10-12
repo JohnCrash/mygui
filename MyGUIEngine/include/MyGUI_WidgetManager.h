@@ -42,6 +42,7 @@ namespace MyGUI
 		void unregisterUnlinker(IUnlinkWidget* _unlink);
 		/** Unlink widget */
 		void unlinkFromUnlinkers(Widget* _widget);
+		void linkNewWidget(Widget* _widget); //创建一个新的Widget通知
 
 		/** Check if factory with specified widget type exist */
 		bool isFactoryExist(const std::string& _type);

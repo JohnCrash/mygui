@@ -44,7 +44,7 @@ namespace MyGUI
 		static T* getInstancePtr()
 		{
 			return msInstance;
-		}
+		} 
 
 		static const char* getClassTypeName()
 		{

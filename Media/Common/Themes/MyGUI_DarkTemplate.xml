@@ -449,6 +449,9 @@
             <Property key="TextAlign" value="Left VCenter"/>
             <UserString key="LE_TargetWidgetType" value="Button"/>
             <Widget type="Widget" skin="PopupMenuCheckSkin_Dark" position="2 3 10 8" align="Left VCenter" name="Check"/>
+            <Widget type="TextBox" skin="TextBox" position="28 0 15 14" align="Right VCenter" name="Hotkey">
+              <Property key="TextAlign" value="Right VCenter"/>
+            </Widget>
         </Widget>
     </Resource>
     <Resource type="ResourceLayout" name="PopupMenuPopup2_Dark" version="3.2.0">

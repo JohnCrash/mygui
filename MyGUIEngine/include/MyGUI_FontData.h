@@ -66,6 +66,99 @@ namespace MyGUI
 
 	typedef std::vector<GlyphInfo> VectorGlyphInfo;
 
+	// информация об диапазоне
+	//FIXME move to std::pair
+	class PairCodePoint
+	{
+	public:
+		PairCodePoint() :
+			first(0),
+			last(0)
+		{
+		}
+
+		PairCodePoint(Char _first, Char _last) :
+			first(_first),
+			last(_last)
+		{
+		}
+
+		// проверяет входит ли символ в диапазон
+		bool isExist(Char _code) const
+		{
+			return _code >= first && _code <= last;
+		}
+
+	public:
+		Char first;
+		Char last;
+	};
+
+	// инфомация о диапазоне символов
+	class RangeInfo
+	{
+	public:
+		RangeInfo() :
+			first(0),
+			last(0)
+		{
+		}
+
+		RangeInfo(Char _first, Char _last) :
+			first(_first),
+			last(_last)
+		{
+			range.resize(last - first + 1);
+		}
+
+		// проверяет входит ли символ в диапазон
+		bool isExist(Char _code) const
+		{
+			return _code >= first && _code <= last;
+		}
+
+		// возвращает указатель на глиф, или 0, если код не входит в диапазон
+		GlyphInfo* getInfo(Char _code)
+		{
+			return isExist(_code) ? &range[_code - first] : nullptr;
+		}
+
+		void setInfo(Char _code, GlyphInfo* _value)
+		{
+			if (isExist(_code)) range[_code - first] = *_value;
+		}
+
+	public:
+		Char first;
+		Char last;
+		VectorGlyphInfo range;
+	};
+
+	// FIXME move to resource font
+	class PairCodeCoord
+	{
+	public:
+		PairCodeCoord() :
+			code(0)
+		{
+		}
+
+		PairCodeCoord(Char _code, const IntCoord& _coord) :
+			code(_code),
+			coord(_coord)
+		{
+		}
+
+		bool operator < (const PairCodeCoord& _value) const
+		{
+			return code < _value.code;
+		}
+
+	public:
+		Char code;
+		IntCoord coord;
+	};
+
 } // namespace MyGUI
 
 #endif // __MYGUI_FONT_DATA_H__

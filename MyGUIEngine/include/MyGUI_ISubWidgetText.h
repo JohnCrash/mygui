@@ -158,6 +158,11 @@ namespace MyGUI
 			return Colour::Zero;
 		}
 
+        virtual void setSelectColour( const Colour& _value ){ }
+        virtual const Colour& getSelectColour()
+        {
+            return Colour::Zero;
+        }
 	};
 
 } // namespace MyGUI

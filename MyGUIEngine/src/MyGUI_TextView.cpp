@@ -6,6 +6,7 @@
 
 #include "MyGUI_Precompiled.h"
 #include "MyGUI_TextView.h"
+#include "MyGUI_TextTag.h"
 
 namespace MyGUI
 {
@@ -101,15 +102,6 @@ namespace MyGUI
 	{
 		mFontHeight = _height;
 
-		// массив для быстрой конвертации цветов
-		static const char convert_colour[64] =
-		{
-			0,  1,  2,  3,  4,  5,  6, 7, 8, 9, 0, 0, 0, 0, 0, 0,
-			0, 10, 11, 12, 13, 14, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 10, 11, 12, 13, 14, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0
-		};
-
 		mViewSize.clear();
 
 		RollBackPoint roll_back;
@@ -120,6 +112,9 @@ namespace MyGUI
 		mLineInfo.clear();
 		LineInfo line_info;
 		int font_height = _font->getDefaultHeight();
+
+		//开始总是使用默认字体
+		_font->setStyle(IFont::Normal);
 
 		UString::const_iterator end = _text.end();
 		UString::const_iterator index = _text.begin();
@@ -173,33 +168,26 @@ namespace MyGUI
 					--index;    // это защита
 					continue;
 				}
-
 				character = *index;
-				// если два подряд, то рисуем один шарп, если нет то меняем цвет
-				if (character != L'#')
+				if( character != L'#' )
 				{
-					// парсим первый символ
-					uint32 colour = convert_colour[(character - 48) & 0x3F];
-
-					// и еще пять символов после шарпа
-					for (char i = 0; i < 5; i++)
+					IFont::Style _style = IFont::Normal;
+					if( tryFontStyleTag(index,end,_style) )
 					{
-						++ index;
-						if (index == end)
-						{
-							--index;    // это защита
-							continue;
-						}
-						colour <<= 4;
-						colour += convert_colour[ ((*index) - 48) & 0x3F ];
+						_font->setStyle(_style);
+						continue;
 					}
-
-					// если нужно, то меняем красный и синий компоненты
-					texture_utility::convertColour(colour, _format);
-
-					line_info.simbols.push_back( CharInfo(colour) );
-
-					continue;
+					// парсим первый символ
+					/*
+						这里做更加严格准确的检测
+					*/
+					uint32 colour;
+					if( tryColourTag(index,end,colour) )
+					{
+						texture_utility::convertColour(colour, _format);
+						line_info.simbols.push_back( CharInfo(colour) );
+						continue;
+					}
 				}
 			}
 

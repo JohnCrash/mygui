@@ -238,6 +238,7 @@ namespace MyGUI
 		//! @copydoc TextBox::setTextShadow
 		virtual void setTextShadow(bool _value);
 
+        IntCoord getCursorCoord();
 		/*events:*/
 		/** Event : Enter pressed (Ctrl+enter in multiline mode).\n
 			signature : void method(MyGUI::EditBox* _sender)

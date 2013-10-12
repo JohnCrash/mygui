@@ -34,6 +34,7 @@ namespace MyGUI
 		// дефолтная высота, указанная в настройках шрифта
 		virtual int getDefaultHeight();
 
+		void setStyle( IFont::Style _style ){}
 	private:
 		// Loads the texture specified by mSource.
 		void loadTexture();

@@ -88,6 +88,11 @@ namespace MyGUI
 		virtual IItemContainer* _getItemContainer();
 		IntSize _getContentSize();
 
+		/*¸ú×ÙUserString*/
+		void setUserString(const std::string& _key, const std::string& _value);
+		bool clearUserString(const std::string& _key);
+		void clearUserStrings();
+
 	protected:
 		virtual void initialiseOverride();
 		virtual void shutdownOverride();
@@ -98,12 +103,14 @@ namespace MyGUI
 
 	private:
 		void updateCheck();
-
+		void updateHotkey();
 	private:
 		MenuControl* mOwner;
 		IntSize mMinSize;
 		Widget* mCheck;
 		bool mCheckValue;
+		//ÏÔÊ¾ÈÈ¼ü
+		TextBox* mHotkey;
 	};
 
 } // namespace MyGUI

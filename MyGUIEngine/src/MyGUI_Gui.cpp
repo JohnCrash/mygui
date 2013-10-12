@@ -27,6 +27,7 @@
 #include "MyGUI_FactoryManager.h"
 #include "MyGUI_ToolTipManager.h"
 #include "MyGUI_TextureUtility.h"
+#include "EditTextManager.h"
 
 namespace MyGUI
 {
@@ -51,6 +52,7 @@ namespace MyGUI
 		mResourceManager(nullptr),
 		mFactoryManager(nullptr),
 		mToolTipManager(nullptr),
+		mEditTextManager(nullptr),
 		mIsInitialise(false)
 	{
 	}
@@ -90,6 +92,7 @@ namespace MyGUI
 		mLanguageManager = new LanguageManager();
 		mFactoryManager = new FactoryManager();
 		mToolTipManager = new ToolTipManager();
+		mEditTextManager = new EditTextManager();
 
 		mResourceManager->initialise();
 		mLayerManager->initialise();
@@ -107,6 +110,7 @@ namespace MyGUI
 		mLanguageManager->initialise();
 		mFactoryManager->initialise();
 		mToolTipManager->initialise();
+		mEditTextManager->initialise();
 
 		WidgetManager::getInstance().registerUnlinker(this);
 
@@ -152,9 +156,9 @@ namespace MyGUI
 		mResourceManager->shutdown();
 		mFactoryManager->shutdown();
 		mToolTipManager->shutdown();
-
 		WidgetManager::getInstance().unregisterUnlinker(this);
 		mWidgetManager->shutdown();
+		mEditTextManager->shutdown();
 
 		delete mPointerManager;
 		delete mWidgetManager;
@@ -172,6 +176,7 @@ namespace MyGUI
 		delete mResourceManager;
 		delete mFactoryManager;
 		delete mToolTipManager;
+		delete mEditTextManager;
 
 		// сбрасываем кеш
 		texture_utility::getTextureSize("", false);

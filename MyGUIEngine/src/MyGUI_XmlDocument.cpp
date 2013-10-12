@@ -141,12 +141,15 @@ namespace MyGUI
 			mName(_name),
 			mContent(_content),
 			mParent(_parent),
-			mType(_type)
+			mType(_type),
+			notifyDelete(nullptr)
 		{
 		}
 
 		Element::~Element()
 		{
+			if( notifyDelete )
+				notifyDelete(this);
 			for (VectorElement::iterator iter = mChilds.begin(); iter != mChilds.end(); ++iter)
 			{
 				delete *iter;

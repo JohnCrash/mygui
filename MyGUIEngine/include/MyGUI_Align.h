@@ -33,72 +33,94 @@ namespace MyGUI
 			VStretch = Top | Bottom, /**< stretch vertically proportionate to parent window (and center horizontally) */
 
 			Stretch = HStretch | VStretch, /**< stretch proportionate to parent window */
-			Default = Left | Top /**< default value (value from left and top) */
+			Default = Left | Top, /**< default value (value from left and top) */
+
+			/*	
+				横向或者纵向占满空间,例如HFull应用与一个菜单条
+			*/
+			HFull = MYGUI_FLAG(5),
+			VFull = MYGUI_FLAG(6),
+			Full = HFull|VFull
 		};
 
 		Align(Enum _value = Default) :
-			mValue(_value)
+			value(_value)
 		{
+		}
+
+		bool isHFull() const
+		{
+			return HFull == (value & ((int)HFull));
+		}
+
+		bool isVFull() const
+		{
+			return VFull == (value & ((int)VFull));
+		}
+
+		bool isFull() const
+		{
+			return isHFull() && isVFull();
 		}
 
 		bool isHCenter() const
 		{
-			return HCenter == (mValue & ((int)HStretch));
+			return HCenter == (value & ((int)HStretch));
 		}
 
 		bool isVCenter() const
 		{
-			return VCenter == (mValue & ((int)VStretch));
+			return VCenter == (value & ((int)VStretch));
 		}
 
 		bool isCenter() const
 		{
-			return Center == (mValue & ((int)Stretch));
+			return Center == (value & ((int)Stretch));
 		}
 
 		bool isLeft() const
 		{
-			return Left == (mValue & ((int)HStretch));
+			return Left == (value & ((int)HStretch));
 		}
 
 		bool isRight() const
 		{
-			return Right == (mValue & ((int)HStretch));
+			return Right == (value & ((int)HStretch));
 		}
 
 		bool isHStretch() const
 		{
-			return HStretch == (mValue & ((int)HStretch));
+			return HStretch == (value & ((int)HStretch));
 		}
 
 		bool isTop() const
 		{
-			return Top == (mValue & ((int)VStretch));
+			return Top == (value & ((int)VStretch));
 		}
 
 		bool isBottom() const
 		{
-			return (Bottom == (mValue & ((int)VStretch)));
+			return (Bottom == (value & ((int)VStretch)));
 		}
 
 		bool isVStretch() const
 		{
-			return (VStretch == (mValue & ((int)VStretch)));
+			return (VStretch == (value & ((int)VStretch)));
 		}
 
 		bool isStretch() const
 		{
-			return (Stretch == (mValue & ((int)Stretch)));
+			return (Stretch == (value & ((int)Stretch)));
 		}
 
 		bool isDefault() const
 		{
-			return (Default == (mValue & ((int)Stretch)));
+			return (Default == (value & ((int)Stretch)));
 		}
 
 		Align& operator |= (Align const& _other)
 		{
-			mValue = Enum(int(mValue) | int(_other.mValue));
+			value = Enum(int(value) | int(_other.value));
 			return *this;
 		}
 
@@ -109,17 +131,17 @@ namespace MyGUI
 
 		friend Align operator | (Align const& a, Align const& b)
 		{
-			return Align(Enum(int(a.mValue) | int(b.mValue)));
+			return Align(Enum(int(a.value) | int(b.value)));
 		}
 
 		friend bool operator == (Align const& a, Align const& b)
 		{
-			return a.mValue == b.mValue;
+			return a.value == b.value;
 		}
 
 		friend bool operator != (Align const& a, Align const& b)
 		{
-			return a.mValue != b.mValue;
+			return a.value != b.value;
 		}
 
 		typedef std::map<std::string, int> MapAlign;
@@ -134,7 +156,24 @@ namespace MyGUI
 				MapAlign::const_iterator iter = map_names.find(vec[pos]);
 				if (iter != map_names.end())
 				{
-					result.mValue = Enum(int(result.mValue) | int(iter->second));
+					result.value = Enum(int(result.value) | int(iter->second));
+				}
+			}
+			return result;
+		}
+
+		//用与lua
+		static Align parse2(const std::string& _value)
+		{
+			Align result(Enum(0));
+			const MapAlign& map_names = result.getValueNames();
+			const std::vector<std::string>& vec = utility::split(_value,"|");
+			for (size_t pos = 0; pos < vec.size(); pos++)
+			{
+				MapAlign::const_iterator iter = map_names.find(vec[pos]);
+				if (iter != map_names.end())
+				{
+					result.value = Enum(int(result.value) | int(iter->second));
 				}
 			}
 			return result;
@@ -144,29 +183,77 @@ namespace MyGUI
 		{
 			std::string result;
 
-			if (mValue & Left)
+			if( value & HFull )
 			{
-				if (mValue & Right)
+				result = "HFull";
+			}
+			else if (value & Left)
+			{
+				if (value & Right)
 					result = "HStretch";
 				else
 					result = "Left";
 			}
-			else if (mValue & Right)
+			else if (value & Right)
 				result = "Right";
 			else
 				result = "HCenter";
 
-			if (mValue & Top)
+			if( value & VFull )
 			{
-				if (mValue & Bottom)
+				result = " VFull";
+			}
+			else if (value & Top)
+			{
+				if (value & Bottom)
 					result += " VStretch";
 				else
 					result += " Top";
 			}
-			else if (mValue & Bottom)
+			else if (value & Bottom)
 				result += " Bottom";
 			else
 				result += " VCenter";
+
+			return result;
+		}
+
+		//用于lua
+		std::string print2() const
+		{
+			std::string result;
+
+			if( value & HFull )
+			{
+				result = "HFull";
+			}
+			else if (value & Left)
+			{
+				if (value & Right)
+					result = "HStretch";
+				else
+					result = "Left";
+			}
+			else if (value & Right)
+				result = "Right";
+			else
+				result = "HCenter";
+
+			if( value & VFull )
+			{
+				result = "|VFull";
+			}
+			else if (value & Top)
+			{
+				if (value & Bottom)
+					result += "|VStretch";
+				else
+					result += "|Top";
+			}
+			else if (value & Bottom)
+				result += "|Bottom";
+			else
+				result += "|VCenter";
 
 			return result;
 		}
@@ -179,14 +266,14 @@ namespace MyGUI
 
 		friend std::istream& operator >> ( std::istream& _stream, Align&  _value )
 		{
-			_value.mValue = Enum(0);
+			_value.value = Enum(0);
 			std::string value;
 			_stream >> value;
 
 			const MapAlign& map_names = _value.getValueNames();
 			MapAlign::const_iterator iter = map_names.find(value);
 			if (iter != map_names.end())
-				_value.mValue = Enum(int(_value.mValue) | int(iter->second));
+				_value.value = Enum(int(_value.value) | int(iter->second));
 
 			if (!_stream.eof())
 			{
@@ -194,7 +281,7 @@ namespace MyGUI
 				_stream >> value2;
 				iter = map_names.find(value2);
 				if (iter != map_names.end())
-					_value.mValue = Enum(int(_value.mValue) | int(iter->second));
+					_value.value = Enum(int(_value.value) | int(iter->second));
 			}
 
 			return _stream;
@@ -202,7 +289,7 @@ namespace MyGUI
 
 		int getValue() const
 		{
-			return mValue;
+			return value;
 		}
 
 	private:
@@ -236,13 +323,15 @@ namespace MyGUI
 				MYGUI_REGISTER_VALUE(map_names, VStretch);
 				MYGUI_REGISTER_VALUE(map_names, Stretch);
 				MYGUI_REGISTER_VALUE(map_names, Default);
+				MYGUI_REGISTER_VALUE(map_names, HFull);
+				MYGUI_REGISTER_VALUE(map_names, VFull);
 			}
 
 			return map_names;
 		}
 
 	private:
-		Enum mValue;
+		Enum value;
 	};
 
 } // namespace MyGUI

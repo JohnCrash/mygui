@@ -39,6 +39,8 @@ namespace MyGUI
 		// получившаяся высота при генерации в пикселях
 		virtual int getDefaultHeight();
 
+		void setStyle( IFont::Style _style ){}
+
 		// Returns a collection of code-point ranges that are supported by this font. Each range is specified as [first, second];
 		// for example, a range containing a single code point will have the same value for both first and second.
 		std::vector<std::pair<Char, Char> > getCodePointRanges() const;

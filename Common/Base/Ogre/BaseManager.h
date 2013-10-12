@@ -49,6 +49,8 @@ namespace base
 
 		MyGUI::MapString getStatistic();
 
+        bool renderOneFrame();
+        
 	/*internal:*/
 		Ogre::SceneManager* getSceneManager();
 		Ogre::Camera* getCamera();

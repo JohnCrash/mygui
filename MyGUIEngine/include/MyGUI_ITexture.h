@@ -49,6 +49,9 @@ namespace MyGUI
 		virtual TextureUsage getUsage() = 0;
 		virtual size_t getNumElemBytes() = 0;
 
+		virtual void* lock(int l,int t,int r,int b,TextureUsage _access) = 0;
+		virtual bool resize(int width,int height) = 0;
+
 		virtual IRenderTarget* getRenderTarget()
 		{
 			return nullptr;

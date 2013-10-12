@@ -104,11 +104,16 @@ namespace MyGUI
 		virtual void setShadowColour(const Colour& _value);
 		virtual const Colour& getShadowColour() const;
 
+        virtual void setSelectColour(const Colour& _value);
+        virtual const Colour& getSelectColour();
+        
 		/*internal:*/
 		virtual void _updateView();
 		virtual void _correctView();
 
 		virtual void _setAlign(const IntSize& _oldsize);
+		
+		void update();
 
 	private:
 		void _setTextColour(const Colour& _value);
@@ -136,6 +141,8 @@ namespace MyGUI
 		uint32 mInverseColourNative;
 		uint32 mCurrentAlphaNative;
 		uint32 mShadowColourNative;
+        uint32 mSelectColourNative;
+        
 		IntCoord mCurrentCoord;
 
 		UString mCaption;
@@ -144,6 +151,7 @@ namespace MyGUI
 
 		Colour mColour;
 		Colour mShadowColour;
+        Colour mSelectColour;
 		float mAlpha;
 		VertexColourType mVertexFormat;
 
@@ -170,7 +178,7 @@ namespace MyGUI
 		bool mWordWrap;
 		bool mManualColour;
 		int mOldWidth;
-
+		
 		TextView mTextView;
 	};
 

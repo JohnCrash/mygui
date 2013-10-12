@@ -14,6 +14,7 @@
 #include "MyGUI_IRenderTarget.h"
 #include "MyGUI_FontData.h"
 #include "MyGUI_CommonStateInfo.h"
+#include "EditTextManager.h"
 
 namespace MyGUI
 {
@@ -28,10 +29,12 @@ namespace MyGUI
 		mInverseColourNative(0x00000000),
 		mCurrentAlphaNative(0xFF000000),
 		mShadowColourNative(0x00000000),
+        mSelectColourNative(0xFF000000),
 		mTextOutDate(false),
 		mTextAlign(Align::Default),
 		mColour(Colour::White),
 		mShadowColour(Colour::Black),
+        mSelectColour(Colour::Black),
 		mAlpha(ALPHA_MAX),
 		mFont(nullptr),
 		mTexture(nullptr),
@@ -52,6 +55,7 @@ namespace MyGUI
 		mManualColour(false),
 		mOldWidth(0)
 	{
+		EditTextManager::getInstance().add( this );
 		mVertexFormat = RenderManager::getInstance().getVertexFormat();
 
 		mCurrentColourNative = texture_utility::toColourARGB(mColour);
@@ -60,10 +64,12 @@ namespace MyGUI
 		mCurrentColourNative = (mCurrentColourNative & 0x00FFFFFF) | (mCurrentAlphaNative & 0xFF000000);
 		mShadowColourNative =  (mShadowColourNative & 0x00FFFFFF) | (mCurrentAlphaNative & 0xFF000000);
 		mInverseColourNative = mCurrentColourNative ^ 0x00FFFFFF;
+        mSelectColourNative = texture_utility::toColourARGB(mSelectColour);
 	}
 
 	EditText::~EditText()
 	{
+		EditTextManager::getInstance().remove( this );
 	}
 
 	void EditText::setVisible(bool _visible)
@@ -527,10 +533,21 @@ namespace MyGUI
 		setShiftText(data->getShift());
 	}
 
+	void EditText::update()
+	{
+		if (nullptr != mNode) mNode->outOfDate(mRenderItem);
+
+		mTextOutDate = true;
+	}
+
 	void EditText::doRender()
 	{
 		if (nullptr == mFont || !mVisible || mEmptyView)
+		{
+			if( mTextOutDate && mFont != nullptr )
+				updateRawData();
 			return;
+		}
 
 		if (mRenderItem->getCurrentUpdate() || mTextOutDate)
 			updateRawData();
@@ -544,8 +561,8 @@ namespace MyGUI
 
 		// текущие цвета
 		uint32 colour = mCurrentColourNative;
-		uint32 inverseColour = mInverseColourNative;
-		uint32 selectedColour = mInvertSelect ? inverseColour : colour | 0x00FFFFFF;
+		uint32 inverseColour = colour;//mInverseColourNative;
+		uint32 selectedColour = mSelectColourNative;//mInvertSelect ? inverseColour : colour | 0x00FFFFFF;
 
 		const VectorLineInfo& textViewData = mTextView.getData();
 
@@ -566,8 +583,8 @@ namespace MyGUI
 				if (sim->isColour())
 				{
 					colour = sim->getColour() | (colour & 0xFF000000);
-					inverseColour = colour ^ 0x00FFFFFF;
-					selectedColour = mInvertSelect ? inverseColour : colour | 0x00FFFFFF;
+					inverseColour = colour;//colour ^ 0x00FFFFFF;
+					//selectedColour = mInvertSelect ? inverseColour : colour | 0x00FFFFFF;
 					continue;
 				}
 
@@ -624,6 +641,21 @@ namespace MyGUI
 		// колличество реально отрисованных вершин
 		mRenderItem->setLastVertexCount(vertexCount);
 	}
+
+    void EditText::setSelectColour(const Colour& _value)
+    {
+        mSelectColour = _value;
+        mSelectColourNative = texture_utility::toColourARGB(mSelectColour);
+        
+        texture_utility::convertColour(mSelectColourNative, mVertexFormat);
+        
+		mSelectColourNative = (mSelectColourNative & 0x00FFFFFF) | (mSelectColourNative & 0xFF000000);
+    }
+    
+    const Colour& EditText::getSelectColour()
+    {
+        return mSelectColour;
+    }
 
 	void EditText::setInvertSelected(bool _value)
 	{

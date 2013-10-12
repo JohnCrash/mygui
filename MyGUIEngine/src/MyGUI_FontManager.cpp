@@ -11,6 +11,7 @@
 
 #include "MyGUI_ResourceManualFont.h"
 #include "MyGUI_ResourceTrueTypeFont.h"
+#include "MyGUI_ResourceDynamicFont.h"
 
 namespace MyGUI
 {

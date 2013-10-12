@@ -57,6 +57,9 @@ namespace MyGUI
 			return mNumElemBytes;
 		}
 
+		virtual void* lock(int l,int t,int r,int b,TextureUsage _access);
+		virtual bool resize(int width,int height);
+
 		virtual IRenderTarget* getRenderTarget();
 
 		static Ogre::TextureUsage convertUsage(TextureUsage _usage);

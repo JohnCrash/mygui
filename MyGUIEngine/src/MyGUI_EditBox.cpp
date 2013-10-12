@@ -412,6 +412,10 @@ namespace MyGUI
 		{
 			if ((mCursorPosition) < mTextLength)
 			{
+                if (mStartSelect == ITEM_NONE)
+                {
+                    mStartSelect = mEndSelect = mCursorPosition;
+                }
 				mCursorPosition ++;
 				mClientText->setCursorPosition(mCursorPosition);
 				updateSelectText();
@@ -427,6 +431,10 @@ namespace MyGUI
 		{
 			if (mCursorPosition != 0)
 			{
+                if (mStartSelect == ITEM_NONE)
+                {
+                    mStartSelect = mEndSelect = mCursorPosition;
+                }
 				mCursorPosition --;
 				mClientText->setCursorPosition(mCursorPosition);
 				updateSelectText();
@@ -443,6 +451,10 @@ namespace MyGUI
 			IntPoint point = mClientText->getCursorPoint(mCursorPosition);
 			point.top -= mClientText->getFontHeight();
 			size_t old = mCursorPosition;
+            if (mStartSelect == ITEM_NONE)
+            {
+                mStartSelect = mEndSelect = mCursorPosition;
+            }
 			mCursorPosition = mClientText->getCursorPosition(point);
 			// самая верхняя строчка
 			if (old == mCursorPosition)
@@ -471,6 +483,10 @@ namespace MyGUI
 			IntPoint point = mClientText->getCursorPoint(mCursorPosition);
 			point.top += mClientText->getFontHeight();
 			size_t old = mCursorPosition;
+            if (mStartSelect == ITEM_NONE)
+            {
+                mStartSelect = mEndSelect = mCursorPosition;
+            }
 			mCursorPosition = mClientText->getCursorPosition(point);
 			// самая нижняя строчка
 			if (old == mCursorPosition)
@@ -633,7 +649,14 @@ namespace MyGUI
 		else
 		{
 			// если не нажат контрл, то обрабатываем как текст
-			if (!input.isControlPressed())
+            /*
+             MacX使用command而不是control
+             */
+#if MYGUI_PLATFORM == MYGUI_PLATFORM_APPLE
+            if(!input.getKeyState(KeyCode::COMMAND))
+#else
+            if (!input.isControlPressed())
+#endif
 			{
 				if (!mModeReadOnly && _char != 0)
 				{
@@ -898,6 +921,11 @@ namespace MyGUI
 		}
 	}
 
+    IntCoord EditBox::getCursorCoord()
+    {
+        return mClientText->getCursorCoord(mClientText->getCursorPosition());
+    }
+    
 	bool EditBox::commandUndo()
 	{
 		if (mVectorUndoChangeInfo.empty())

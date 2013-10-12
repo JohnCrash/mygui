@@ -4,7 +4,7 @@
 #include "EditorWidgets.h"
 #include "WidgetTypes.h"
 #include "UndoManager.h"
-#include "Base/Main.h"
+//#include "Base/Main.h"
 #include "GroupMessage.h"
 #include "FileSystemInfo/FileSystemInfo.h"
 #include "CommandManager.h"
@@ -554,4 +554,4 @@ namespace tools
 
 }
 
-MYGUI_APP(tools::Application)
+//MYGUI_APP(tools::Application)

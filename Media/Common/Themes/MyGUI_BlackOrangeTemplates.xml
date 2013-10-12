@@ -132,6 +132,7 @@
 				<Property key="TextAlign" value="Left VCenter"/>
 				<Property key="FontName" value="Default"/>
 				<Property key="TextColour" value="1 1 1"/>
+                <Property key="SelectColour" value="1 0 0"/>
 				<Property key="Pointer" value="beam"/>
 			</Widget>
 		</Widget>
@@ -344,7 +345,10 @@
 			<Property key="TextAlign" value="Left VCenter"/>
 			<UserString key="LE_TargetWidgetType" value="Button"/>
 			<Widget type="Widget" skin="MenuItemCheckButtonSkin" position="1 0 15 13" align="Left VCenter" name="Check"/>
-		</Widget>
+      <Widget type="TextBox" skin="TextBox" position="28 0 15 14" align="Right VCenter" name="Hotkey">
+        <Property key="TextAlign" value="Right VCenter"/>
+      </Widget>
+    </Widget>
 	</Resource>
 	<Resource type="ResourceLayout" name="PopupMenuPopup" version="3.2.0">
 		<Widget type="Widget" skin="MenuItemNormalSkin" position="20 25 43 14" name="Root">

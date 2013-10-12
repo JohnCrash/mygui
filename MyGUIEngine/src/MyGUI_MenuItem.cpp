@@ -14,7 +14,8 @@ namespace MyGUI
 		mOwner(nullptr),
 		mMinSize(10, 10),
 		mCheck(nullptr),
-		mCheckValue(false)
+		mCheckValue(false),
+		mHotkey(nullptr)
 	{
 	}
 
@@ -37,6 +38,7 @@ namespace MyGUI
 
 		///@wskin_child{MenuItem, Widget, Check} Галочка для отмеченного состояния.
 		assignWidget(mCheck, "Check");
+		assignWidget(mHotkey,"Hotkey");
 
 		//if (isUserString("MinSize"))
 		//	mMinSize = IntSize::parse(getUserString("MinSize"));
@@ -45,6 +47,7 @@ namespace MyGUI
 		setNeedKeyFocus(true);
 
 		updateCheck();
+		updateHotkey();
 	}
 
 	void MenuItem::shutdownOverride()
@@ -171,7 +174,38 @@ namespace MyGUI
 		if (text == nullptr)
 			return mMinSize;
 
-		return text->getTextSize() + (getSize() - text->getSize());
+		IntSize size;
+		if( mHotkey )
+		{
+			size = mHotkey->getTextSize();
+			//size.width *= 2;
+			size.height = 0;
+		}
+		return text->getTextSize() + (getSize() - text->getSize()) + size;
+	}
+
+	void MenuItem::updateHotkey()
+	{
+		if( mHotkey )
+		{
+			std::string key = getUserString("hotkey");
+			if( key.empty() )
+			{
+				mHotkey->setCaption(key);
+			}
+			else
+			{
+			//	MyGUI::UString s="#FFFF00#<B>[#<I>";
+			//	s.append(getUserString("hotkey"));
+			//	s.append("#<B>]");
+				MyGUI::UString s = getUserString("hotkey");
+				mHotkey->setCaption(s);
+				MyGUI::IntSize size = mHotkey->getTextSize();
+				MyGUI::IntCoord co = mHotkey->getCoord();
+				MyGUI::IntSize ws = getSize();
+				mHotkey->setCoord( ws.width-size.width-4,co.top,size.width,co.height );
+			}
+		}
 	}
 
 	void MenuItem::updateCheck()
@@ -191,4 +225,24 @@ namespace MyGUI
 		updateCheck();
 	}
 
+	void MenuItem::setUserString(const std::string& _key, const std::string& _value)
+	{
+		UserData::setUserString(_key,_value);
+		if( _key == "hotkey" )
+			updateHotkey();
+	}
+
+	bool MenuItem::clearUserString(const std::string& _key)
+	{
+		bool bret = UserData::clearUserString(_key);
+		if( _key == "hotkey" )
+			updateHotkey();
+		return bret;
+	}
+
+	void MenuItem::clearUserStrings()
+	{
+		UserData::clearUserStrings();
+		updateHotkey();
+	}
 } // namespace MyGUI

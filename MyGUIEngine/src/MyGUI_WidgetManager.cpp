@@ -109,6 +109,8 @@ namespace MyGUI
 			Widget* widget = object->castType<Widget>();
 			widget->_initialise(_style, _coord, _skin, _parent, _cropeedParent, _name);
 
+			//通知创建了一个新的Widget
+			linkNewWidget(widget);
 			return widget;
 		}
 
@@ -148,6 +150,14 @@ namespace MyGUI
 		for (VectorIUnlinkWidget::iterator iter = mVectorIUnlinkWidget.begin(); iter != mVectorIUnlinkWidget.end(); ++iter)
 		{
 			(*iter)->_unlinkWidget(_widget);
+		}
+	}
+
+	void WidgetManager::linkNewWidget(Widget* _widget)
+	{
+		for (VectorIUnlinkWidget::iterator iter = mVectorIUnlinkWidget.begin(); iter != mVectorIUnlinkWidget.end(); ++iter)
+		{
+			(*iter)->_linkWidget(_widget);
 		}
 	}
 

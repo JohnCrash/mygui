@@ -110,6 +110,41 @@ namespace MyGUI
 		return mTmpData.data;
 	}
 
+	void* OgreTexture::lock(int l,int t,int r,int b,TextureUsage _access)
+	{
+		if (_access == TextureUsage::Write)
+		{
+			return mTexture->getBuffer()->lock(Ogre::Image::Box(l,t,r,b),Ogre::HardwareBuffer::HBL_DISCARD).data;
+		}
+		//仅仅用于动态字体的写入操作
+		return nullptr;
+	}
+	
+	bool OgreTexture::resize(int width,int height)
+	{
+		//删除老的材质
+		Ogre::TextureManager::getSingleton().remove(mTexture->getName());
+
+		//创建新的材质
+		Ogre::TexturePtr newTex = Ogre::TextureManager::getSingleton().createManual(
+			mName,
+			mGroup,
+			Ogre::TEX_TYPE_2D,
+			width, 
+			height,
+			0,
+			mPixelFormat,
+			mUsage,
+			this);
+		newTex->load();
+		//将老的材质blit到新的材质中
+		Ogre::Image::Box box(0,0,std::min(width,getWidth()),std::min(height,getHeight()));
+		newTex->getBuffer()->blit( mTexture->getBuffer(),box,box );
+		
+		mTexture = newTex;
+		return true;
+	}
+
 	void OgreTexture::unlock()
 	{
 		if (mTexture->getBuffer()->isLocked())

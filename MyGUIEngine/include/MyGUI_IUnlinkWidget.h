@@ -17,6 +17,7 @@ namespace MyGUI
 	{
 	public:
 		virtual ~IUnlinkWidget() { }
+		virtual void _linkWidget(Widget* _widget){}; //简单的增加一个函数用来监视Widget的创建
 		virtual void _unlinkWidget(Widget* _widget) = 0;
 	};
 

@@ -55,6 +55,9 @@ namespace MyGUI
 		/** Add log source. */
 		void addLogSource(LogSource* _source);
 
+		LogSource* getDefaultSource(){ 
+			return mDefaultSource;
+		}
 	private:
 		void close();
 

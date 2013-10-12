@@ -144,9 +144,17 @@ if (WIN32)
 	"Specify the Input Manager for samples. Possible values:
 	  1 - OIS
 	  2 - Win32
-	  3 - Win32 (Mouse) + OIS (Keyboard)"
+	  3 - Win32 (Mouse) + OIS (Keyboard)
+	  4 - OSX"
 	)
 else()
+	set(MYGUI_SAMPLES_INPUT 1 CACHE STRING
+	"Specify the Input Manager for samples. Possible values:
+	  1 - OIS
+	  2 - Win32
+	  3 - Win32 (Mouse) + OIS (Keyboard)
+	  4 - OSX"
+	)
 	set(MYGUI_SAMPLES_INPUT 1)
 endif()
 
@@ -176,6 +184,7 @@ endif ()
 
 # Set compiler specific build flags
 if (CMAKE_COMPILER_IS_GNUCXX)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse")
 	if (NOT MYGUI_HIGH_LEVEL_WARNINGS)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
 	else ()
@@ -201,6 +210,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 endif ()
 
 if (MSVC)
+	add_definitions(/fp:fast)
 	add_definitions("-D_CRT_SECURE_NO_WARNINGS")
 	
 	# Use the highest warning level for visual studio.

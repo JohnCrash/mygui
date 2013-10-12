@@ -568,7 +568,12 @@ namespace MyGUI
 		IntCoord coord = mCoord;
 
 		// первоначальное выравнивание
-		if (mAlign.isHStretch())
+		if( mAlign.isHFull())
+		{
+			coord.width = _newSize.width;
+			need_size = true;
+		}
+		else if (mAlign.isHStretch())
 		{
 			// растягиваем
 			coord.width = mCoord.width + (size.width - _oldsize.width);
@@ -587,7 +592,12 @@ namespace MyGUI
 			need_move = true;
 		}
 
-		if (mAlign.isVStretch())
+		if( mAlign.isVFull() )
+		{
+			coord.height = _newSize.height;
+			need_size = true;
+		}
+		else if (mAlign.isVStretch())
 		{
 			// растягиваем
 			coord.height = mCoord.height + (size.height - _oldsize.height);

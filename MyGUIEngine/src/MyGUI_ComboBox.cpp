@@ -176,7 +176,7 @@ namespace MyGUI
 	void ComboBox::notifyListMouseItemActivate(ListBox* _widget, size_t _position)
 	{
 		mItemIndex = _position;
-		Base::setCaption(mItemIndex != ITEM_NONE ? mList->getItemNameAt(mItemIndex) : "");
+		Base::setCaption(mItemIndex != ITEM_NONE && mList ? mList->getItemNameAt(mItemIndex) : "");
 
 		InputManager::getInstance().setKeyFocusWidget(this);
 

@@ -54,6 +54,7 @@ namespace base
 	{
 		#if MYGUI_PLATFORM == MYGUI_PLATFORM_APPLE
 			mResourcePath = macBundlePath() + "/Contents/Resources/";
+        mResourceXMLName = mResourcePath+mResourceXMLName;
 		#else
 			mResourcePath = "";
 		#endif
@@ -137,7 +138,7 @@ namespace base
 		createScene();
 
 		windowResized(mWindow);
-
+       
 		return true;
 	}
 
@@ -168,7 +169,12 @@ namespace base
 
 		};
 	}
-
+    
+	bool BaseManager::renderOneFrame()
+	{
+		return mRoot->renderOneFrame();
+	}
+    
 	void BaseManager::destroy()
 	{
 		destroyScene();
@@ -331,7 +337,9 @@ namespace base
 	{
 		#if MYGUI_PLATFORM == MYGUI_PLATFORM_APPLE
 			// OS X does not set the working directory relative to the app, In order to make things portable on OS X we need to provide the loading with it's own bundle path location
-			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(Ogre::String(macBundlePath() + "/" + _name), _type, _group, _recursive);
+		//	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(Ogre::String(macBundlePath() + "/" + _name), _type, _group, _recursive);
+        Ogre::ResourceGroupManager::getSingleton().addResourceLocation(_name, _type, _group, _recursive);
+        
 		#else
 			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(_name, _type, _group, _recursive);
 		#endif

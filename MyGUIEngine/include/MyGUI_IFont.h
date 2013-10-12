@@ -21,7 +21,14 @@ namespace MyGUI
 		public IResource
 	{
 		MYGUI_RTTI_DERIVED( IFont )
-
+	public:
+		enum Style
+		{
+			Normal = 0,
+			Bold = 1,
+			Italic = 2,
+			BoldItalic =3
+		};
 	public:
 		IFont() { }
 		virtual ~IFont() { }
@@ -31,6 +38,11 @@ namespace MyGUI
 		virtual ITexture* getTextureFont() = 0;
 
 		virtual int getDefaultHeight() = 0;
+
+		/*
+			为了支持粗体和斜体，这里加入一个函数setStyle
+		*/
+		virtual void setStyle( IFont::Style _style ) = 0;
 	};
 
 } // namespace MyGUI

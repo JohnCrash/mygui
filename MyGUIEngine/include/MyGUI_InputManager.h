@@ -127,13 +127,15 @@ namespace MyGUI
 		/*internal:*/
 		void _resetMouseFocusWidget();
 
+        void setKeyboardStates( unsigned char* ps );
+        bool getKeyState(KeyCode _key) const;
 	private:
 		// удаляем данный виджет из всех возможных мест
 		void _unlinkWidget(Widget* _widget);
 
 		void frameEntered(float _frame);
 
-		void firstEncoding(KeyCode _key, bool bIsKeyPressed);
+	//	void firstEncoding(KeyCode _key, bool bIsKeyPressed);
 
 		// запоминает клавишу для поддержки повторения
 		void storeKey(KeyCode _key, Char _text);
@@ -151,9 +153,9 @@ namespace MyGUI
 		Timer mTimer; //used for double click timing
 
 		// нажат ли шифт
-		bool mIsShiftPressed;
+	//	bool mIsShiftPressed;
 		// нажат ли контрол
-		bool mIsControlPressed;
+	//	bool mIsControlPressed;
 
 		IntPoint mMousePosition;
 
@@ -174,6 +176,9 @@ namespace MyGUI
 		VectorWidgetPtr mVectorModalRootWidget;
 
 		bool mIsInitialise;
+        
+        //指向一个外部缓冲区大小为256,用来判断按键是否被按下
+        unsigned char* mKeyStates;
 	};
 
 } // namespace MyGUI

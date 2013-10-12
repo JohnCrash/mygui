@@ -170,6 +170,8 @@ set (HEADER_FILES
   include/MyGUI_WidgetUserData.h
   include/MyGUI_Window.h
   include/MyGUI_XmlDocument.h
+  include/EditTextManager.h
+  include/MyGUI_ResourceDynamicFont.h  
 )
 set (SOURCE_FILES
   src/MyGUI_ActionController.cpp
@@ -267,6 +269,8 @@ set (SOURCE_FILES
   src/MyGUI_WidgetUserData.cpp
   src/MyGUI_Window.cpp
   src/MyGUI_XmlDocument.cpp
+  src/EditTextManager.cpp
+  src/ResourceDynamicFont.cpp
 )
 SOURCE_GROUP("Header Files" FILES
   include/MyGUI_Allocator.h
@@ -350,6 +354,7 @@ SOURCE_GROUP("Header Files\\Core\\Manager" FILES
   include/MyGUI_SubWidgetManager.h
   include/MyGUI_ToolTipManager.h
   include/MyGUI_WidgetManager.h
+  include/EditTextManager.h
 )
 SOURCE_GROUP("Header Files\\Core\\Resource" FILES
   include/MyGUI_ResourceImageSet.h
@@ -359,6 +364,7 @@ SOURCE_GROUP("Header Files\\Core\\Resource" FILES
   include/MyGUI_ResourceManualPointer.h
   include/MyGUI_ResourceSkin.h
   include/MyGUI_ResourceTrueTypeFont.h
+  include/MyGUI_ResourceDynamicFont.h 
 )
 SOURCE_GROUP("Header Files\\Core\\Resource\\Data" FILES
   include/MyGUI_ChildSkinInfo.h
@@ -521,6 +527,7 @@ SOURCE_GROUP("Source Files\\Core\\Manager" FILES
   src/MyGUI_SubWidgetManager.cpp
   src/MyGUI_ToolTipManager.cpp
   src/MyGUI_WidgetManager.cpp
+  src/EditTextManager.cpp
 )
 SOURCE_GROUP("Source Files\\Core\\Resource" FILES
   src/MyGUI_ResourceImageSet.cpp
@@ -530,6 +537,7 @@ SOURCE_GROUP("Source Files\\Core\\Resource" FILES
   src/MyGUI_ResourceManualPointer.cpp
   src/MyGUI_ResourceSkin.cpp
   src/MyGUI_ResourceTrueTypeFont.cpp
+  src/ResourceDynamicFont.cpp  
 )
 SOURCE_GROUP("Source Files\\Core\\Resource\\Data" FILES
   src/MyGUI_ChildSkinInfo.cpp

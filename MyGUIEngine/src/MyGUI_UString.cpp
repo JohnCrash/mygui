@@ -950,6 +950,7 @@ namespace MyGUI
 			}
 			utf8buf[utf8len] = 0; // nul terminate so we throw an exception before running off the end of the buffer
 			utf8len = _utf8_to_utf32( utf8buf, uc ); // do the UTF-8 -> UTF-32 conversion
+
 			i += utf8len - 1; // we subtract 1 for the increment of the 'for' loop
 
 			utf16len = _utf32_to_utf16( uc, utf16buff ); // UTF-32 -> UTF-16 conversion
@@ -1846,8 +1847,7 @@ namespace MyGUI
 				if (( c & ~_lead1_mask ) == _lead1 ) { // 1 additional byte
 					if ( c == _lead1 )
 					{
-						//throw invalid_data( "overlong UTF-8 sequence" );
-						return str.size();
+						throw invalid_data( "overlong UTF-8 sequence" );
 					}
 					contBytes = 1;
 
@@ -1857,8 +1857,7 @@ namespace MyGUI
 						c = ( *( i + 1 ) ); // look ahead to next byte in sequence
 						if (( c & _lead2 ) == _cont )
 						{
-							//throw invalid_data( "overlong UTF-8 sequence" );
-							return str.size();
+							throw invalid_data( "overlong UTF-8 sequence" );
 						}
 					}
 
@@ -1868,8 +1867,7 @@ namespace MyGUI
 						c = ( *( i + 1 ) ); // look ahead to next byte in sequence
 						if (( c & _lead3 ) == _cont )
 						{
-							//throw invalid_data( "overlong UTF-8 sequence" );
-							return str.size();
+							throw invalid_data( "overlong UTF-8 sequence" );
 						}
 					}
 
@@ -1879,8 +1877,7 @@ namespace MyGUI
 						c = ( *( i + 1 ) ); // look ahead to next byte in sequence
 						if (( c & _lead4 ) == _cont )
 						{
-							//throw invalid_data( "overlong UTF-8 sequence" );
-							return str.size();
+							throw invalid_data( "overlong UTF-8 sequence" );
 						}
 					}
 
@@ -1890,19 +1887,19 @@ namespace MyGUI
 						c = ( *( i + 1 ) ); // look ahead to next byte in sequence
 						if (( c & _lead5 ) == _cont )
 						{
-							//throw invalid_data( "overlong UTF-8 sequence" );
-							return str.size();
+							throw invalid_data( "overlong UTF-8 sequence" );
 						}
 					}
 				}
 
 				// check remaining continuation bytes for
+				if( ie-i<=contBytes )
+					throw invalid_data( "overlong UTF-8 sequence" );
 				while ( contBytes-- ) {
 					c = ( *( ++i ) ); // get next byte in sequence
 					if (( c & ~_cont_mask ) != _cont )
 					{
-						//throw invalid_data( "bad UTF-8 continuation byte" );
-						return str.size();
+						throw invalid_data( "bad UTF-8 continuation byte" );
 					}
 				}
 			}

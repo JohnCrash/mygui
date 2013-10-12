@@ -18,11 +18,28 @@ namespace tools
 		friend class weak_ptr<T>;
 
 	public:
-		shared_ptr() : ptr(0), count(nil()) { incref(); }
-		~shared_ptr() { decref(); }
+		shared_ptr() : 
+        ptr(0), 
+        count(nil2()) 
+        { 
+            incref();
+        }
+		~shared_ptr() 
+        { 
+            decref(); 
+        }
 
-		shared_ptr(const shared_ptr<T>& o) : ptr(o.ptr), count(o.count) { incref(); }
-		shared_ptr(T* p) : ptr(p), count(new unsigned(1)) { }
+		shared_ptr(const shared_ptr<T>& o) : 
+        ptr(o.ptr),
+        count(o.count)
+        { 
+            incref(); 
+        }
+		shared_ptr(T* p) : 
+        ptr(p), 
+        count(new unsigned(1)) 
+        {
+        }
 		explicit shared_ptr(const weak_ptr<T>& w) : ptr(w.ptr), count(w.count) { incref(); }
 
 		shared_ptr<T>& operator=(const shared_ptr<T>& o)
@@ -52,9 +69,20 @@ namespace tools
 
 	private:
 		/* special case, null pointer (nil-code) */
-		static unsigned* nil() { static unsigned nil_counter(1); return &nil_counter; }
+		static unsigned* nil2() 
+        { 
+            static unsigned nil_counter(1); 
+            return &nil_counter; 
+        }
 
-		void decref() { if (--(*count) == 0) { delete ptr; delete count; } }
+		void decref() 
+        { 
+            if (--(*count) == 0) 
+            { 
+                delete ptr; 
+                delete count; 
+            } 
+        }
 		void incref() { ++(*count); }
 
 	private:
@@ -68,7 +96,7 @@ namespace tools
 		friend class shared_ptr<T>;
 
 	public:
-		weak_ptr() : ptr(0), count(shared_ptr<T>::nil()) { }
+		weak_ptr() : ptr(0), count(shared_ptr<T>::nil2()) { }
 		explicit weak_ptr( const shared_ptr<T>& s) : ptr(s.ptr), count(s.count) { }
 
 		shared_ptr<T> lock() const { return shared_ptr<T>(*this); }

@@ -106,6 +106,7 @@ namespace MyGUI
 			F13             = 0x64,    /*                     (NEC PC98) */
 			F14             = 0x65,    /*                     (NEC PC98) */
 			F15             = 0x66,    /*                     (NEC PC98) */
+            COMMAND         = 0x67,    /* Apple command */
 			Kana            = 0x70,    /* (Japanese keyboard)            */
 			ABNT_C1         = 0x73,    /* / ? on Portugese (Brazilian) keyboards */
 			Convert         = 0x79,    /* (Japanese keyboard)            */
@@ -163,12 +164,12 @@ namespace MyGUI
 			Mail			= 0xEC,
 			MediaSelect		= 0xED
 		};
-
+        
 		KeyCode(Enum _value = None) :
 			mValue(_value)
 		{
 		}
-
+            
 		friend bool operator < (KeyCode const& a, KeyCode const& b)
 		{
 			return (a.mValue < b.mValue);

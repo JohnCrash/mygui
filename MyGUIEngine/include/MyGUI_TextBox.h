@@ -72,6 +72,8 @@ namespace MyGUI
 		/** Get widget text shadow */
 		bool getTextShadow();
 
+        virtual void setSelectColour(const Colour& _value);
+        virtual const Colour& getSelectColour();
 	protected:
 		virtual void setPropertyOverride(const std::string& _key, const std::string& _value);
 	};

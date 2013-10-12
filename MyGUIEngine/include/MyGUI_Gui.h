@@ -186,6 +186,7 @@ namespace MyGUI
 		ResourceManager* mResourceManager;
 		FactoryManager* mFactoryManager;
 		ToolTipManager* mToolTipManager;
+		EditTextManager* mEditTextManager;
 
 		bool mIsInitialise;
 	};

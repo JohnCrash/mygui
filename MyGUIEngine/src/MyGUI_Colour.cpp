@@ -32,6 +32,14 @@ namespace MyGUI
 		alpha(_alpha)
 	{
 	}
+	
+	Colour::Colour(uint32 _c)
+	{//argb
+		alpha = (float)(((_c>>24)&0xff)/255.0);
+		red = (float)(((_c>>16)&0xff)/255.0);
+		green = (float)(((_c>>8)&0xff)/255.0);
+		blue = (float)(((_c)&0xff)/255.0);
+	}
 
 	Colour::Colour(const std::string& _value)
 	{
