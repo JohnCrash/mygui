@@ -389,7 +389,7 @@ namespace MyGUI
 #if (OGRE_VERSION < MYGUI_DEFINE_VERSION(1, 9, 0))
 			Ogre::TexturePtr texture = (Ogre::TexturePtr)Ogre::TextureManager::getSingleton().getByName(_name);
 #else
-			Ogre::TexturePtr texture = (Ogre::TexturePtr)Ogre::TextureManager::getSingleton().getByName(_name).staticCast<Ogre::Texture>();
+			Ogre::TexturePtr texture = (Ogre::TexturePtr)Ogre::TextureManager::getSingleton().getByName(_name);//.staticCast<Ogre::Texture>();
 #endif
 			if (!texture.isNull())
 			{
