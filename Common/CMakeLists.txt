@@ -127,6 +127,6 @@ elseif(MYGUI_SAMPLES_INPUT EQUAL 4)
 	target_link_libraries(${PROJECTNAME} ${OSX_LIBRARIES})
 endif()
 
-if(NOT WIN32)
+if(NOT WIN32 AND APPLE)
 	target_link_libraries(${PROJECTNAME} X11)
 endif()
