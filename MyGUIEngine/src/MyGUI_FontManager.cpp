@@ -37,7 +37,7 @@ namespace MyGUI
 		std::string resourceCategory = ResourceManager::getInstance().getCategoryName();
 		FactoryManager::getInstance().registerFactory<ResourceManualFont>(resourceCategory);
 		FactoryManager::getInstance().registerFactory<ResourceTrueTypeFont>(resourceCategory);
-
+		FactoryManager::getInstance().registerFactory<ResourceDynamicFont>(resourceCategory);
 		mDefaultName = "Default";
 
 		MYGUI_LOG(Info, getClassTypeName() << " successfully initialized");
