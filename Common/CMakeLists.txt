@@ -14,16 +14,29 @@ function(mygui_add_input_source PLATFORM)
 		Input/${PLATFORM}/InputManager.h
 		Input/${PLATFORM}/PointerManager.h
 		PARENT_SCOPE)
+	if (APPLE)
+	set (SOURCE_FILES ${SOURCE_FILES}
+		Input/${PLATFORM}/InputManager.mm
+		Input/${PLATFORM}/PointerManager.cpp
+		PARENT_SCOPE)
+		 SOURCE_GROUP("Base" FILES
+		Input/${PLATFORM}/InputManager.h
+		Input/${PLATFORM}/InputManager.mm
+		Input/${PLATFORM}/PointerManager.h
+		Input/${PLATFORM}/PointerManager.cpp
+	 )
+	else ()
 	set (SOURCE_FILES ${SOURCE_FILES}
 		Input/${PLATFORM}/InputManager.cpp
 		Input/${PLATFORM}/PointerManager.cpp
 		PARENT_SCOPE)
-	SOURCE_GROUP("Base" FILES
+	 SOURCE_GROUP("Base" FILES
 		Input/${PLATFORM}/InputManager.h
 		Input/${PLATFORM}/InputManager.cpp
 		Input/${PLATFORM}/PointerManager.h
 		Input/${PLATFORM}/PointerManager.cpp
-	)
+	 )
+	endif ()
 endfunction(mygui_add_input_source)
 
 set (PROJECTNAME Common)
@@ -87,6 +100,7 @@ elseif(MYGUI_SAMPLES_INPUT EQUAL 3)
 	include_directories(${OIS_INCLUDE_DIRS})
 	mygui_add_input_source(Win32_OIS)
 elseif(MYGUI_SAMPLES_INPUT EQUAL 4)
+	include_directories(${MYGUI_SOURCE_DIR}/Common/Input/OSX)
 	mygui_add_input_source(OSX)
 endif()
 
@@ -127,6 +141,6 @@ elseif(MYGUI_SAMPLES_INPUT EQUAL 4)
 	target_link_libraries(${PROJECTNAME} ${OSX_LIBRARIES})
 endif()
 
-if(NOT WIN32 AND APPLE)
-	target_link_libraries(${PROJECTNAME} X11)
-endif()
+#if(NOT WIN32 AND APPLE)
+#	target_link_libraries(${PROJECTNAME} X11)
+#endif()

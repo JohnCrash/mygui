@@ -438,7 +438,9 @@ namespace input
 		MyGUI::Gui::getInstance().eventFrameStart -= MyGUI::newDelegate(this, &InputManager::frameEvent);
         
 		// если мы подменили процедуру, то вернем на место
-        [gInputResponder release];
+        if(gInputResponder)
+            [gInputResponder release];
+        gInputResponder = nil;
 	}
     
 	void InputManager::captureInput()

@@ -59,7 +59,7 @@ namespace base
 
 		virtual void createScene()
 		{
-			loadPointerResources();
+		//	loadPointerResources();
 		}
 
 	protected:

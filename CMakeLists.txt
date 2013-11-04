@@ -155,7 +155,6 @@ else()
 	  3 - Win32 (Mouse) + OIS (Keyboard)
 	  4 - OSX"
 	)
-	set(MYGUI_SAMPLES_INPUT 1)
 endif()
 
 if (MSVC)
@@ -194,6 +193,10 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 		endif ()
 		if (MYGUI_SAMPLES_INPUT EQUAL 1 OR MYGUI_SAMPLES_INPUT EQUAL 3)
 			# to avoid warnings from OIS
+			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isystem ${OIS_INCLUDE_DIR}")
+		endif ()
+		if (MYGUI_SAMPLES_INPUT EQUAL 4 )
+			# OSX
 			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isystem ${OIS_INCLUDE_DIR}")
 		endif ()
 		if (NOT APPLE)

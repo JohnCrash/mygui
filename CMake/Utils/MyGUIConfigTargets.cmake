@@ -329,6 +329,9 @@ function(mygui_tool PROJECTNAME)
 	endif ()
 
 	include_directories(${MYGUI_SOURCE_DIR}/Tools/EditorFramework)
+	if(APPLE)
+		include_directories(${MYGUI_SOURCE_DIR}/Common/Input/OSX)
+	endif ()
 	include(PrecompiledHeader)
 	# specify a precompiled header to use
 	use_precompiled_header(${PROJECTNAME}
